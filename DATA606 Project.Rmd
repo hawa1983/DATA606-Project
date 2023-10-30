@@ -1,0 +1,132 @@
+---
+title: "DATA 606 Data Project Proposal"
+authors: "Fomba Kassoh & Souleymane Doumbia"
+date: "2023-10-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Data Preparation
+
+
+```{r}
+library(dplyr)
+library(readr)
+library(stringr)
+library(tidyverse)
+```
+
+
+```{r}
+# load data
+covid_data <- read_csv("https://raw.githubusercontent.com/hawa1983/DATA606-Project/main/covid_data1.csv")
+glimpse(covid_data)
+```
+
+
+### Research question 
+
+**You should phrase your research question in a way that matches up with the scope of inference your dataset allows for.**
+
+Among individuals tested for a specific condition in October 2020, how does age group, sex, and race influence the likelihood of requiring hospitalization? Specifically, are certain age groups, genders, or racial/ethnic groups at a higher risk of severe outcomes as indicated by hospitalization?
+
+### Cases 
+
+**What are the cases, and how many are there?**
+Each case represents a Covid-19 patient in the united states. There 203,224 observations in the given data set.
+
+
+### Data collection 
+
+**Describe the method of data collection.**
+Data is collected by the Center for Disease Control and Prevention (CDC). Data is submitted by hospitals.
+
+
+### Type of study 
+
+**What type of study is this (observational/experiment)?**
+This is an observational study.
+
+### Data Source 
+
+**If you collected the data, state self-collected. If not, provide a citation/link.**
+Data is collected by CDC and is available online here: https://data.cdc.gov/Case-Surveillance/COVID-19-Case-Surveillance-Public-Use-Data/vbim-akqf. For this project, data was extracted by downloading the csv format table.
+
+
+
+### Dependent Variable
+
+**What is the response variable? Is it quantitative or qualitative?**
+
+The response variable is "Death Status (Did the patient die as a result of covid?)," which is a categorical variable. It is recorded by hospitals that admit covid patients.
+
+### Independent Variable(s)
+
+The independent variables are race and gender
+
+
+### Relevant summary statistics 
+
+**Provide summary statistics for each the variables. Also include appropriate visualizations related to your research question (e.g. scatter plot, boxplots, etc). This step requires the use of R, hence a code chunk is provided below. Insert more code chunks as needed.**
+
+Covid hospitalization by race
+```{r by race}
+ggplot(covid_data, aes(race_ethnicity_combined)) +
+  geom_bar() +
+  labs(title = "Covid Hospitalization by Race",
+       x = "Race",
+       y = "Frequency") +
+  coord_flip()
+```
+
+Proportion of Covid infection by gender
+
+```{r prop by sex}
+covid_data |> 
+  count(sex)|>
+  mutate(proportion = round(n/sum(n),6))
+```
+
+Proportion pf Icu admission
+```{r prop by icu}
+covid_data |> 
+  count(icu_yn)|>
+  mutate(proportion = round(n/sum(n),6))
+```
+
+Distribution of Covid infection by age group
+```{r prop by icu}
+covid_data |> 
+  count(age_group)|>
+  mutate(proportion = round(n/sum(n),6))
+```
+
+
+```{r by race}
+ggplot(covid_data, aes(age_group)) +
+  geom_bar() +
+  labs(title = "Covid Hospitalization by Race",
+       x = "Age Group",
+       y = "Frequency") +
+  coord_flip()
+```
+
+Time series of covid deaths.
+```{r}
+
+death_yes <- covid_data %>%
+  filter(death_yn == "Yes") %>%
+  mutate(cdc_case_earliest_dt = as.Date(cdc_case_earliest_dt, format = "%m/%d/%Y")) %>%
+  count(cdc_case_earliest_dt) %>%
+  arrange(cdc_case_earliest_dt)
+
+# Assuming you have a data frame named 'mydata'
+ggplot(death_yes, aes(x = cdc_case_earliest_dt, y = n)) +
+  geom_line() +           # Line plot
+  labs(x = "Date", y = "No. Deaths") +  # Labels for axes
+  ggtitle("Time Series Plot of Covid Death")   # Title for the plot
+
+
+```
