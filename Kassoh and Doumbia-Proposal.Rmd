@@ -34,7 +34,7 @@ glimpse(covid_data)
 
 **You should phrase your research question in a way that matches up with the scope of inference your dataset allows for.**
 
-Among individuals tested for a specific condition in October 2020, how does age group, sex, and race influence the likelihood of requiring hospitalization? Specifically, are certain age groups, genders, or racial/ethnic groups at a higher risk of severe outcomes as indicated by hospitalization?
+Among individuals tested for Covid in October 2020, how does age group, sex, and race influence the likelihood of requiring hospitalization? Specifically, are certain age groups, genders, or racial/ethnic groups at a higher risk of severe outcomes as indicated by hospitalization?
 
 ### Cases 
 
